@@ -4,7 +4,6 @@ const { format } = require("timeago.js");
 const helpers = {};
 
 helpers.timeago = (timestamp) => {
-     console.log("Fecha ", timestamp);
      return format(timestamp);
 }
 
