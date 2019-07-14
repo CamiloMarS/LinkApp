@@ -17,8 +17,9 @@ router.post("/add", async (request, response)=> {
           url,
           descripcion: description
      };
-     LOGGER("NEWLINK ", newLink);
-     await pool_db.query('INSERT INTO links set ?', [newLink]); //Peticion asincrona
+     LOGGER("START CONNECTION LINK ::: ", newLink);
+     await pool_db.query('INSERT INTO links set ?', [newLink]); //Async Request
+     request.flash('msg_success', 'link saved successfully'.toUpperCase());
      response.redirect("/links");
 });
 
@@ -40,6 +41,7 @@ router.get("/delete/:id", async ( request, response ) => {
      
      if(affectedRows) {
           //Alert success
+          request.flash('msg_delete', `Registry successfully deleted`.toUpperCase());
           response.redirect('/links');
      }
 });
@@ -59,7 +61,7 @@ router.get("/edit/:id", async (req, resp) => {
 });
 
 //Update link 
-router.post("/edit/:id", async (req, resp) => {
+router.post("/edit/:id", async ( req, resp ) => {
      const { id } = req.params;
      const { title, url, description } = req.body;
      const linkEdit = { title, url, descripcion:description };
@@ -68,7 +70,7 @@ router.post("/edit/:id", async (req, resp) => {
      LOGGER("Init update ::: ...");
      let update = await pool_db.query('UPDATE links SET ? WHERE id = ?', [linkEdit, id]);
      LOGGER("Response updated ::: ", JSON.stringify(update));
-
+     req.flash('msg_edit', 'Registry successfully updated'.toUpperCase());
      resp.redirect("/links");
 });
 
