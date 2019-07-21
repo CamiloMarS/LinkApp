@@ -1,5 +1,3 @@
-'use strict';
-
 const express = require('express');
 const morgan = require('morgan');
 const ex_handlebars = require('express-handlebars'); //plantillas
@@ -7,10 +5,12 @@ const path = require('path');
 const flash = require('connect-flash'); //midlewar
 const express_session = require('express-session');
 const mysql_store = require('express-mysql-session');
+const passport = require('passport');
 const { database } = require('./keys');
 
 /** Inicializations **/
 const app = express(); //Execute express
+require('./lib/passport');
 
 
 /** Server Settings **/
@@ -38,6 +38,8 @@ app.use(flash());
 app.use(morgan('dev')); 
 app.use(express.urlencoded({extended: false})); //Acepta datos enviados desde formularios
 app.use(express.json()); //Para que reciba jsons
+app.use(passport.initialize());
+app.use(passport.session());
 
 /**  Global Variables (middlewares)**/
 app.use((request, response, next) => { //midleware
